@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project name="Hello World" default="run">
+    <property name="debug" value="true"/>
+	<target name="clean">
+        <delete dir="bin" />
+    </target>
+
+    <target name="build">
+        <mkdir dir="bin" />
+        <csc target="exe" output="bin/Aula0Console.exe" debug="${debug}">
+            <sources>
+                <include name="Aula0Console/Program.cs"/>
+            </sources>
+        </csc>
+    </target>
+
+	<target name="test" depends="build">
+		<mkdir dir="bin" />
+		<csc target="library" output="bin/Aula0.Test.dll" debug="${debug}">
+            <sources>
+                <include name="Aula0Test/Aula0Test.cs"/>
+            </sources>
+			<references>
+			 <include name="bin/Aula0Console.exe" />
+			 <include name="../../assemblies/nunit.framework.dll" />
+			</references>
+        </csc>
+		<nunit2>
+			<formatter type="Plain" />
+			<test assemblyname="bin/Aula0.Test.dll" 
+				appconfig="bin/Aula0.Test.dll.config" />
+		</nunit2>	
+	</target>
+	
+    <target name="run" depends="test">
+		<!-- Executando o programa -->
+        <exec program="bin/Aula0Console.exe" basedir="."/>
+    </target>
+</project>
